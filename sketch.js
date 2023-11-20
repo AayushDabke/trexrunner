@@ -36,33 +36,33 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(600, 200);
+  createCanvas(windowWidth, windowHeight);
 
   var message = "This is a message";
  console.log(message)
   
-  trex = createSprite(50,160,20,50);
+  trex = createSprite(50,height-70,20,50);
   trex.addAnimation("running", trex_running);
   trex.addAnimation("collided", trex_collided);
   
 
   trex.scale = 0.5;
   
-  ground = createSprite(200,180,400,20);
+  ground = createSprite(width/2,height,width,2);
   ground.addImage("ground",groundImage);
   ground.x = ground.width /2;
   
-  gameOver = createSprite(300,100);
+  gameOver = createSprite(width/2,height/2 - 50);
   gameOver.addImage(gameOverImg);
   
-  restart = createSprite(300,140);
+  restart = createSprite(width/2,height/2);
   restart.addImage(restartImg);
   
  
   gameOver.scale = 0.5;
   restart.scale = 0.5;
   
-  invisibleGround = createSprite(200,190,400,10);
+  invisibleGround = createSprite(width/2,height-10,width,125);
   invisibleGround.visible = false;
   
   //create Obstacle and Cloud Groups
@@ -88,9 +88,8 @@ function draw() {
     gameOver.visible = false;
     restart.visible = false;
     
-    ground.velocityX = -(4 + 3* score/100)
-    //scoring
-    score = score + Math.round(getFrameRate()/45);
+    ground.velocityX = -(6 + 3* score/100)
+    score = score + Math.round(getFrameRate()/60);
     
     if(score>0 && score%100 === 0){
        checkPointSound.play() 
@@ -101,9 +100,10 @@ function draw() {
     }
     
     //jump when the space key is pressed
-    if(keyDown("space")&& trex.y >= 100) {
+    if(keyDown("space")&& trex.y >= 100 || touches.length > 0 ) {
         trex.velocityY = -12;
         jumpSound.play();
+         touches = [];
     }
     
     //add gravity
